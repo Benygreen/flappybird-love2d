@@ -15,6 +15,11 @@ local flapped = false
 local funcs = require("functions")
 local score = 0
 local game = {}
+local sounds = {
+	flap = love.audio.newSource("flap.mp3", "static"),
+	score = love.audio.newSource("score.mp3", "static"),
+	gameOver = love.audio.newSource("gameover.mp3", "static")
+}
 local function checkCollision(b1, b2)
 	return b1[1] < b2[1] + b2[3] and
 		   b2[1] < b1[1] + b1[3] and
@@ -44,6 +49,9 @@ function game.load()
 	score = 0
 end
 function game.update(dt)
+	if love.keyboard.isDown("escape") then
+		funcs.SwitchState(Menu)
+	end
 	local birdPaddingX = 4
 	local birdPaddingY = 4
 	local birdWidth = (birdImage:getWidth() / 10) - (birdPaddingX * 2)
@@ -56,12 +64,14 @@ function game.update(dt)
 	}
 	if yPosition > 500 or yPosition < 0 then
 		funcs.SwitchState(Menu)
+		sounds.gameOver:play()
 	end
 	velocity = velocity + gravity * dt
 	local flapCondition = (love.keyboard.isDown("space") or love.keyboard.isDown("up") or love.keyboard.isDown("w"))
 	if flapCondition and not flapped then
 		flapped = true
 		velocity = flapStrength
+		sounds.flap:clone():play()
 	elseif (not flapCondition) and flapped then
 		flapped = false
 	end
@@ -77,15 +87,17 @@ function game.update(dt)
 		local pipeHeight = pipeImage:getHeight() * pipeScale
 		local pipeBoundingBox = {
 			pipe.x + pipePaddingX,
-			pipe.y + (pipeHeight * (pipe.flipped and 1 or 0)),
+			pipe.y + (pipeHeight * (pipe.flipped and 2.5 or 0)),
 			pipeWidth,
 			pipeHeight
 		}
 		if checkCollision(birdBoundingBox, pipeBoundingBox) then
 			funcs.SwitchState(Menu)
+			sounds.gameOver:play()
 		end
 		if pipe.x >= (xPosition - 1) and pipe.x <= (xPosition + 1) then
 			score = score + 0.5
+			sounds.score:clone():play()
 		end
 		pipe.x = pipe.x - pipeSpeed * dt
 		if pipe.x + pipeImage:getWidth() * pipeScale < 0 then
