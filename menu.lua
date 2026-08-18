@@ -3,7 +3,7 @@ local funcs = require("functions")
 local logo = love.graphics.newImage("logo.png")
 local logoScale = 0.3
 function menu.update()
-    if love.keyboard.isDown("return") then
+    if love.keyboard.isDown("return") or love.mouse.isDown(1) then
         funcs.SwitchState(Game)
     end
     if love.keyboard.isDown("escape") then
