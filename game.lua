@@ -47,6 +47,7 @@ function game.load()
 	yPosition = 200
 	pipes = {}
 	score = 0
+	velocity = 0
 end
 function game.update(dt)
 	if love.keyboard.isDown("escape") then
@@ -87,7 +88,7 @@ function game.update(dt)
 		local pipeHeight = pipeImage:getHeight() * pipeScale
 		local pipeBoundingBox = {
 			pipe.x + pipePaddingX,
-			pipe.y + (pipeHeight * (pipe.flipped and 2.5 or 0)),
+			pipe.y + (pipeHeight * (pipe.flipped and 0.5 or 0)),
 			pipeWidth,
 			pipeHeight
 		}
@@ -107,13 +108,22 @@ function game.update(dt)
 	yPosition = yPosition + velocity * dt
 end
 function game.draw()
-	love.graphics.draw(birdImage, xPosition, yPosition, velocity / 500, 0.125, 0.125)
+	love.graphics.draw(
+		birdImage,
+		xPosition,
+		yPosition,
+		velocity / 500,
+		0.125,
+		0.125,
+		birdImage:getWidth() / 2,
+		birdImage:getHeight() /2
+	)
 	for _, pipe in ipairs(pipes) do
 		if pipe.flipped then
 			love.graphics.draw(
 				pipeImage,
 				pipe.x,
-				(pipe.y + pipeImage:getHeight()) + 30, 
+				pipe.y + 900,
 				0,
 				pipeScale,
 				-pipeScale
@@ -122,7 +132,7 @@ function game.draw()
 			love.graphics.draw(
 				pipeImage,
 				pipe.x,
-				pipe.y + 30,
+				pipe.y,
 				0,
 				pipeScale,
 				pipeScale
