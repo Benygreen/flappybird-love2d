@@ -1,6 +1,6 @@
 local menu = {}
 local funcs = require("functions")
-local logo = funcs.LoadImageFromPath("logo.png")
+local logo = love.graphics.newImage("logo.png")
 local logoScale = 0.3
 function menu.update()
     if love.keyboard.isDown("return") then
