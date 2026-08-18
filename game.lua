@@ -42,8 +42,8 @@ local function spawnPipePair()
 end
 function game.load()
 	love.window.setTitle("Flappy Bird")
-	birdImage = funcs.LoadImageFromPath("bird.png")
-	pipeImage = funcs.LoadImageFromPath("pipe.png")
+	birdImage = love.graphics.newImage("bird.png")
+	pipeImage = love.graphics.newImage("pipe.png")
 	yPosition = 200
 	pipes = {}
 	score = 0
@@ -55,8 +55,8 @@ function game.update(dt)
 	end
 	local birdPaddingX = 4
 	local birdPaddingY = 4
-	local birdWidth = (birdImage:getWidth() / 10) - (birdPaddingX * 2)
-	local birdHeight = (birdImage:getHeight() / 10) - (birdPaddingY * 2)
+	local birdWidth = (birdImage:getWidth() / 14) - (birdPaddingX * 2)
+	local birdHeight = (birdImage:getHeight() / 14) - (birdPaddingY * 2)
 	local birdBoundingBox = {
 		xPosition + birdPaddingX,
 		yPosition + birdPaddingY,
